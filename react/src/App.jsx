@@ -4,7 +4,9 @@ import viteLogo from '/vite.svg'
 import Sock from './components/Sock'
 import Footer from './components/Footer'
 import Search from './components/Search'
+import Promo from './components/Promo'
 import sock_data from './assets/sock.json'
+import promo_data from './assets/promo.json'
 import './App.css'
 
 function App() {
@@ -45,15 +47,28 @@ function App() {
           </div>
         </div>
       </nav>
-      <main role="main" className="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+      <main role="main" className="ml-sm-auto col-lg-12 px-md-4">
 
         <div className="container-fluid">
           <div className="row">
             Both socks and space rockets 🚀 will take you to new heights, but only one will get cold feet!
-            <div className="card-container">
-              <Sock data={sock_data} />
-              <Footer environment="Development" />
+            <div className="card-container" style={{ display: 'flex', flexWrap: "nowrap", gap: '20px', padding: '20px' }}>
+              {
+                promo_data.map(
+                  (promo) => (
+                    <Promo key={promo.id} data={promo} />
+                  ))
+              }
             </div>
+            <hr />
+            <div className="card-container" style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+              {
+                sock_data.map((sock) => (
+                  <Sock key={sock.id} data={sock} />
+                ))
+              }
+            </div>
+            <Footer environment="Development" />
           </div>
         </div>
       </main>
