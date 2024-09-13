@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import Sock from './components/Sock'
@@ -11,6 +11,41 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(import.meta.env.VITE_SOCKS_API_URL);
+        if (!response.ok) {
+          throw new Error('Data could not be fetched!');
+        }
+
+        const json_response = await response.json();
+        setData(json_response);
+      } catch (error) {
+        console.error('Error fetching socks:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleDelete = async (sockId) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SOCKS_API_URL}/${sockId}`, {
+        method: `DELETE`
+      });
+      if (!response.ok) {
+        throw new Error('Sock could not be deleted!');
+      }
+
+      const updatedData = data.filter(sock => sock._id !== sockId);
+      setData(updatedData);
+    } catch (error) {
+      console.error('Error deleting sock:', error);
+    }
+  }
 
   return (
     <>
@@ -43,7 +78,7 @@ function App() {
                 <a className="nav-link disabled" aria-disabled="true">Disabled</a>
               </li>
             </ul>
-            <Search />
+            <Search setData={setData} />
           </div>
         </div>
       </nav>
@@ -63,12 +98,12 @@ function App() {
             <hr />
             <div className="card-container" style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
               {
-                sock_data.map((sock) => (
-                  <Sock key={sock.id} data={sock} />
+                data.map((sock) => (
+                  <Sock key={sock._id} data={sock} handleDelete={handleDelete} />
                 ))
               }
             </div>
-            <Footer environment="Development" />
+            <Footer environment={import.meta.env.VITE_ENVIRONMENT} />
           </div>
         </div>
       </main>
