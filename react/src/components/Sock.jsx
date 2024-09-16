@@ -2,7 +2,7 @@ import React from 'react';
 
 const Sock = (props) => {
   const convertBoolean = (prop) => {
-    return prop ? 'No' : 'Yes';
+    return prop ? 'Yes' : 'No';
   }
 
   return (
