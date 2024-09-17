@@ -9,31 +9,36 @@ import Home from './components/Home'
 import About from './components/About'
 import Featured from './components/Featured'
 import AddSock from './components/AddSock'
+import Navigator from './components/Navigator'
 import sock_data from './assets/sock.json'
 import promo_data from './assets/promo.json'
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom"
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [page, setPage] = useState(1)
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(import.meta.env.VITE_SOCKS_API_URL);
-        if (!response.ok) {
-          throw new Error('Data could not be fetched!');
-        }
+  const LIMIT = import.meta.env.VITE_SOCKS_PAGE_LIMIT;
 
-        const json_response = await response.json();
-        setData(json_response);
-      } catch (error) {
-        console.error('Error fetching socks:', error);
+  const updatePage = async (page) => {
+    setPage(page);
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SOCKS_API_URL}/${page}/${LIMIT}`);
+      if (!response.ok) {
+        throw new Error('Data could not be fetched!');
       }
-    };
 
-    fetchData();
+      const json_response = await response.json();
+      setData(json_response);
+    } catch (error) {
+      console.error('Error fetching socks:', error);
+    }
+  }
+
+  useEffect(() => {
+    updatePage(page);
   }, []);
 
   const handleDelete = async (sockId) => {
@@ -84,6 +89,7 @@ function App() {
               Both socks and space rockets 🚀 will take you to new heights, but only one will get cold feet!
               <hr />
               <Featured promoData={promo_data} />
+              <Navigator page={page} updatePage={updatePage} />
               <Routes>
                 <Route exact path="/" element={<Home data={data} handleDelete={handleDelete} />} />
                 <Route path="/about" element={<About />} />
