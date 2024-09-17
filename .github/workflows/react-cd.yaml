@@ -26,6 +26,7 @@ jobs:
           cd react
           echo "VITE_SOCKS_API_URL = https://ecs.the-sock-exchange.com/api/socks" > .env
           echo "VITE_ENVIRONMENT = production" >> .env
+          echo "VITE_SOCKS_PAGE_LIMIT = 10" >> .env
 
       - name: Build Vite React app
         run: |
