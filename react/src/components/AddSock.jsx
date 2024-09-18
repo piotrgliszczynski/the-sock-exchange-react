@@ -10,12 +10,12 @@ const AddSock = () => {
     addSockRequest.userId = user.uid;
 
     addSockRequest.sockDetails = {};
-    addSockRequest.sockDetails.size = event.target[1].value;
-    addSockRequest.sockDetails.color = event.target[2].value;
-    addSockRequest.sockDetails.pattern = event.target[3].value;
-    addSockRequest.sockDetails.material = event.target[4].value;
-    addSockRequest.sockDetails.condition = event.target[5].value;
-    addSockRequest.sockDetails.forFoot = event.target[6].value;
+    addSockRequest.sockDetails.size = event.target[0].value;
+    addSockRequest.sockDetails.color = event.target[1].value;
+    addSockRequest.sockDetails.pattern = event.target[2].value;
+    addSockRequest.sockDetails.material = event.target[3].value;
+    addSockRequest.sockDetails.condition = event.target[4].value;
+    addSockRequest.sockDetails.forFoot = event.target[5].value;
 
     addSockRequest.additionalFeatures = {
       waterResistant: false,
