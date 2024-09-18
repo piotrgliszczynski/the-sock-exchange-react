@@ -1,11 +1,13 @@
 import React from 'react';
+import { useAuth } from '../hooks/AuthContext';
 
 const AddSock = () => {
+  const { user } = useAuth();
 
   const onSockSubmit = (event) => {
     event.preventDefault();
     let addSockRequest = {};
-    addSockRequest.userId = event.target[0].value;
+    addSockRequest.userId = user.uid;
 
     addSockRequest.sockDetails = {};
     addSockRequest.sockDetails.size = event.target[1].value;
@@ -38,11 +40,13 @@ const AddSock = () => {
 
   return (
     <div className="col-4">
+      <div>
+        {user ?
+          <h5>Welcome, {user.username}! Your UID is {user.uid}</h5> :
+          <h1>Plase log in.</h1>
+        }
+      </div>
       <form className="text-start" id="add-sock" onSubmit={onSockSubmit}>
-        <div className="m-2">
-          <label htmlFor="userId" className="form-label">User ID</label>
-          <input className="form-control" type="text" id="userId" name="userId" />
-        </div>
         <div className="m-2">
           <label htmlFor="size" className="form-label">Size</label>
           <select className="form-select" id="size" name="size">

@@ -10,6 +10,9 @@ import About from './components/About'
 import Featured from './components/Featured'
 import AddSock from './components/AddSock'
 import Navigator from './components/Navigator'
+import RequireAuth from './components/RequireAuth'
+import LoginForm from './components/LoginForm'
+import { AuthProvider } from './hooks/AuthContext'
 import sock_data from './assets/sock.json'
 import promo_data from './assets/promo.json'
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom"
@@ -90,11 +93,18 @@ function App() {
               <hr />
               <Featured promoData={promo_data} />
               <Navigator page={page} updatePage={updatePage} />
-              <Routes>
-                <Route exact path="/" element={<Home data={data} handleDelete={handleDelete} />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/add-sock" element={<AddSock />} />
-              </Routes>
+              <AuthProvider>
+                <Routes>
+                  <Route exact path="/" element={<Home data={data} handleDelete={handleDelete} />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/add-sock" element={
+                    <RequireAuth>
+                      <AddSock />
+                    </RequireAuth>
+                  } />
+                  <Route path="/login" element={<LoginForm />} />
+                </Routes>
+              </AuthProvider>
               <Footer environment={import.meta.env.VITE_ENVIRONMENT} />
             </div>
           </div>
