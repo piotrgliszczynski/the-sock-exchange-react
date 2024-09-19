@@ -6,23 +6,48 @@ agent any
     }
 
     stages {
-        stage('Build') {
+        stage('Install dependencies') {
             steps {
                 // Build placeholder
-                echo "Building..."
+                bat '''
+                    cd react
+                    npm install
+                '''
             }
         }
 
         stage('Test') {
             steps {
                 // Test placeholder
-                echo "Running tests..."
+                bat '''
+                    cd react
+                    npm run test
+                '''
+            }
+        }
+
+        stage('Add .env file') {
+            steps {
+                bat '''
+                    cd react
+                    (echo VITE_SOCKS_API_URL = http://localhost:3000/socks & echo VITE_ENVIRONMENT = development) > .env
+                '''
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Build for production
+                bat '''
+                    cd react
+                    npm run build
+                '''
             }
         }
 
         stage('Approval') {
             steps {
-                input message: 'Approve for release?', submitter: 'user'
+                input message 'Approve for release?', submitter: 'user'
             }
         }
 
